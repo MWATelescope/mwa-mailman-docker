@@ -1,4 +1,12 @@
-version: '3.2'
+version: '3.3'
+
+networks:
+    default:
+        driver: overlay
+        ipam:
+            driver: default
+            config:
+                - subnet 10.1.0.0/24
 
 services:
     mailman-core:
@@ -23,7 +31,7 @@ services:
             - mailman_rest_password
 
     mailman-web:
-        image: sphericalcowgroup/mailman-web:0.1.7
+        image: sphericalcowgroup/mailman-web:0.1.7-2
         volumes:
             - /srv/docker/mailman/web:/opt/mailman-web-data
         environment:
@@ -60,11 +68,12 @@ services:
             - postgres_password
 
     postfix:
-        image: mwatelescope/mailman-postfix
+        image: sphericalcowgroup/mailman-postfix:565db1
         volumes:
             - /srv/docker/mailman:/opt/mailman
         environment:
-            - POSTFIX_MAILNAME=lists.mwatelescope.org
+            - POSTFIX_MYHOSTNAME=lists.mwatelescope.org
+            - POSTFIX_MYNETWORKS=!10.255.0.0/16 10.1.0.0/24
         ports:
             - "25:25"
         networks:
@@ -78,6 +87,7 @@ services:
             - NGINX_HTTPS_CERT_FILE=/run/secrets/nginx_https_cert_file
             - NGINX_HTTPS_KEY_FILE=/run/secrets/nginx_https_key_file
             - NGINX_DH_PARAM_FILE=/run/secrets/nginx_dh_param_file
+            - SERVER_NAME=lists.mwatelescope.org
         secrets:
             - nginx_https_cert_file
             - nginx_https_key_file
