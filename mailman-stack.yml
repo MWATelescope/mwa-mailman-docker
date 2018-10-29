@@ -6,7 +6,7 @@ networks:
         ipam:
             driver: default
             config:
-                - subnet 10.1.0.0/24
+                - subnet: 10.1.0.0/24
 
 services:
     mailman-core:
