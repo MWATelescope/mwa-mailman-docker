@@ -75,7 +75,15 @@ services:
             - POSTFIX_MYHOSTNAME=lists.mwatelescope.org
             - POSTFIX_MYNETWORKS=!10.255.0.0/16 10.1.0.0/24
         ports:
-            - "25:25"
+            - target: 25
+              published: 25
+              # 'host' mode is necessary for Postfix to receive the connection IP address
+              # instead of the ingress network IP address. This is only a useful workaround
+              # when not truly leveraging the load balancing capabilities of swarm mode.
+              # Normally with more than a single mode swarm the upstream load balancer in
+              # front of the swarm would be used for the definitive access log.
+              # See discussion at https://github.com/moby/moby/issues/25526 .
+              mode: host
         networks:
             - default
 
