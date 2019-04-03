@@ -10,7 +10,7 @@ networks:
 
 services:
     mailman-core:
-        image: sphericalcowgroup/mailman-core:0.1.7
+        image: sphericalcowgroup/mailman-core:0.2.1
         volumes:
             - /srv/docker/mailman/core:/opt/mailman/
         environment:
@@ -29,9 +29,11 @@ services:
             - hyperkitty_api_key
             - mailman_database_url
             - mailman_rest_password
+        deploy:
+            endpoint_mode: dnsrr
 
     mailman-web:
-        image: sphericalcowgroup/mailman-web:0.1.7-2
+        image: sphericalcowgroup/mailman-web:0.2.1
         volumes:
             - /srv/docker/mailman/web:/opt/mailman-web-data
         environment:
@@ -53,6 +55,8 @@ services:
             - mailman_database_url
             - mailman_rest_password
             - mailman_web_secret_key
+        deploy:
+            endpoint_mode: dnsrr
 
     database:
         image: postgres:9.6
@@ -66,6 +70,8 @@ services:
             - default
         secrets:
             - postgres_password
+        deploy:
+            endpoint_mode: dnsrr
 
     postfix:
         image: sphericalcowgroup/mailman-postfix:565db1
@@ -86,20 +92,28 @@ services:
               mode: host
         networks:
             - default
+        deploy:
+            endpoint_mode: dnsrr
 
-    nginx:
-        image: sphericalcowgroup/mailman-core-nginx
+    apache:
+        image: sphericalcowgroup/mailman-core-apache-shib:1
         volumes:
             - /srv/docker/mailman/web:/opt/mailman-web-data
+            - /srv/docker/mailman/shib/etc/shibboleth2.xml:/etc/shibboleth/shibboleth2.xml
+            - /srv/docker/mailman/shib/etc/attribute-map.xml:/etc/shibboleth/attribute-map.xml
+            - /srv/docker/mailman/shib/etc/mwa-proxy-metadata.xml:/etc/shibboleth/mwa-proxy-metadata.xml
         environment:
-            - NGINX_HTTPS_CERT_FILE=/run/secrets/nginx_https_cert_file
-            - NGINX_HTTPS_KEY_FILE=/run/secrets/nginx_https_key_file
-            - NGINX_DH_PARAM_FILE=/run/secrets/nginx_dh_param_file
-            - SERVER_NAME=lists.mwatelescope.org
+            - HTTPS_CERT_FILE=/run/secrets/https_cert_file
+            - HTTPS_KEY_FILE=/run/secrets/https_key_file
+            - MAILMAN_ADMIN_EMAIL=greg.sleap@curtin.edu.au 
+            - SHIBBOLETH_SP_ENCRYPT_CERT=/run/secrets/shibboleth_sp_encrypt_cert
+            - SHIBBOLETH_SP_ENCRYPT_PRIVKEY=/run/secrets/shibboleth_sp_encrypt_privkey
+            - VIRTUAL_HOST_FQDN=lists.mwatelescope.org
         secrets:
-            - nginx_https_cert_file
-            - nginx_https_key_file
-            - nginx_dh_param_file
+            - https_cert_file
+            - https_key_file
+            - shibboleth_sp_encrypt_cert
+            - shibboleth_sp_encrypt_privkey
         networks:
             - default
         ports:
@@ -119,8 +133,13 @@ services:
               mode: host
         deploy:
             replicas: 1
+            endpoint_mode: dnsrr
 
 secrets:
+    https_cert_file:
+        external: true
+    https_key_file:
+        external: true
     hyperkitty_api_key:
         external: true
     mailman_database_url:
@@ -129,11 +148,9 @@ secrets:
         external: true
     mailman_web_secret_key:
         external: true
-    nginx_https_cert_file:
-        external: true
-    nginx_https_key_file:
-        external: true
-    nginx_dh_param_file:
-        external: true
     postgres_password:
+        external: true
+    shibboleth_sp_encrypt_cert:
+        external: true
+    shibboleth_sp_encrypt_privkey:
         external: true
