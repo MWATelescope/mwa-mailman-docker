@@ -74,12 +74,13 @@ services:
             endpoint_mode: dnsrr
 
     postfix:
-        image: sphericalcowgroup/mailman-postfix:565db1
+        image: sphericalcowgroup/mailman-postfix:3
         volumes:
             - /srv/docker/mailman:/opt/mailman
         environment:
             - POSTFIX_MYHOSTNAME=lists.mwatelescope.org
             - POSTFIX_MYNETWORKS=!10.255.0.0/16 10.1.0.0/24
+            - POSTFIX_RELAYHOST=202.8.37.138
         ports:
             - target: 25
               published: 25
@@ -102,6 +103,7 @@ services:
             - /srv/docker/mailman/shib/etc/shibboleth2.xml:/etc/shibboleth/shibboleth2.xml
             - /srv/docker/mailman/shib/etc/attribute-map.xml:/etc/shibboleth/attribute-map.xml
             - /srv/docker/mailman/shib/etc/mwa-proxy-metadata.xml:/etc/shibboleth/mwa-proxy-metadata.xml
+            - /srv/docker/mailman/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
         environment:
             - HTTPS_CERT_FILE=/run/secrets/https_cert_file
             - HTTPS_KEY_FILE=/run/secrets/https_key_file
