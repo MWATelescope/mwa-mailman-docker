@@ -10,7 +10,7 @@ networks:
 
 services:
     mailman-core:
-        image: sphericalcowgroup/mailman-core:0.2.1
+        image: sphericalcowgroup/mailman-core:0.2.3
         volumes:
             - /srv/docker/mailman/core:/opt/mailman/
         environment:
@@ -33,7 +33,7 @@ services:
             endpoint_mode: dnsrr
 
     mailman-web:
-        image: sphericalcowgroup/mailman-web:0.2.1
+        image: sphericalcowgroup/mailman-web:0.2.3
         volumes:
             - /srv/docker/mailman/web:/opt/mailman-web-data
         environment:
