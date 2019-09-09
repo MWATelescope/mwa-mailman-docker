@@ -80,7 +80,6 @@ services:
         environment:
             - POSTFIX_MYHOSTNAME=lists.mwatelescope.org
             - POSTFIX_MYNETWORKS=!10.255.0.0/16 10.1.0.0/24
-            - POSTFIX_RELAYHOST=202.8.37.138
         ports:
             - target: 25
               published: 25
