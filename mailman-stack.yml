@@ -97,7 +97,7 @@ services:
             endpoint_mode: dnsrr
 
     apache:
-        image: mwatelescope/mailman-core-apache-shib:2B
+        image: mwatelescope/mailman-core-apache-shib:3A
         volumes:
             - /srv/docker/mailman/web:/opt/mailman-web-data
             - /srv/docker/mailman/shib/etc/shibboleth2.xml:/etc/shibboleth/shibboleth2.xml
