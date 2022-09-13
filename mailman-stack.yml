@@ -33,7 +33,7 @@ services:
             endpoint_mode: dnsrr
 
     mailman-web:
-        image: mwatelescope/mailman-web:0.2.3-2B 
+        image: mwatelescope/mailman-web:0.2.3-2-202209 
         volumes:
             - /srv/docker/mailman/web:/opt/mailman-web-data
         environment:
@@ -97,7 +97,7 @@ services:
             endpoint_mode: dnsrr
 
     apache:
-        image: mwatelescope/mailman-core-apache-shib:3A
+        image: mwatelescope/mailman-core-apache-shib:3-202209
         volumes:
             - /srv/docker/mailman/web:/opt/mailman-web-data
             - /srv/docker/mailman/shib/etc/shibboleth2.xml:/etc/shibboleth/shibboleth2.xml
