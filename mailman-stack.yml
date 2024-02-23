@@ -75,13 +75,13 @@ services:
             endpoint_mode: dnsrr
 
     postfix:
-        image: mwatelescope/mailman-postfix:3-202209C
+        image: mwatelescope/mailman-postfix:4-20240223
         volumes:
             - /srv/docker/mailman:/opt/mailman
         environment:
-              # wiki01p, reg01p, web01p, ind01p, web01d, mwa-django01p, cerberus-ilom
+              # reg01p, web01p, ind01p, web01d, mwa-django01p, cerberus-ilom, DFN nimbus dev
             - POSTFIX_MYHOSTNAME=lists.mwatelescope.org
-            - POSTFIX_MYNETWORKS=!10.255.0.0/16 10.1.0.0/24 10.51.218.228/32 10.51.218.43/32 10.51.218.48/32 10.51.218.218/32 10.51.227.7/32 10.51.218.205/32 202.9.9.10/32
+            - POSTFIX_MYNETWORKS=!10.255.0.0/16 10.1.0.0/24 10.51.218.43/32 10.51.218.48/32 10.51.218.218/32 10.51.227.7/32 10.51.218.205/32 202.9.9.10/32 146.118.69.137/32
         secrets:
             - https_cert_file
             - https_key_file
