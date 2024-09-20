@@ -79,9 +79,9 @@ services:
         volumes:
             - /srv/docker/mailman:/opt/mailman
         environment:
-              # reg01p, web01p, ind01p, web01d, mwa-django01p, cerberus-ilom, DFN nimbus dev
+              # reg01p, web01p, ind01p, web01d, mwa-django01p, cerberus-ilom, DFN nimbus dev, DFN AWS Dev
             - POSTFIX_MYHOSTNAME=lists.mwatelescope.org
-            - POSTFIX_MYNETWORKS=!10.255.0.0/16 10.1.0.0/24 10.51.218.43/32 10.51.218.48/32 10.51.218.218/32 10.51.227.7/32 10.51.218.205/32 202.9.9.10/32 146.118.69.137/32
+            - POSTFIX_MYNETWORKS=!10.255.0.0/16 10.1.0.0/24 10.51.218.43/32 10.51.218.48/32 10.51.218.218/32 10.51.227.7/32 10.51.218.205/32 202.9.9.10/32 146.118.69.137/32 52.64.118.206/32
         secrets:
             - https_cert_file
             - https_key_file
